@@ -419,7 +419,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')rpClose(1)});
 
 /* ===== v5: ejemplos desde el CSV del repositorio ===== */
 /* CAMBIA AQUÍ el nombre (o ruta) de tu CSV dentro del repo, ej: 'pedidos.csv' o 'data/pedidos.csv' */
-const CSV_EJEMPLO='pedidos.csv';
+const CSV_EJEMPLO='Pedidos_Septiembre.csv';
 async function dm(){
  try{
   const r=await fetch(encodeURI(CSV_EJEMPLO)+'?v='+Date.now());
