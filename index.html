@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var t=localStorage.getItem('ap_theme');document.documentElement.dataset.theme=['orig','claro','oscuro'].indexOf(t)>-1?t:'orig'}catch(e){document.documentElement.dataset.theme='orig'}</script>
+<title>ArtesaníasPlus – Pedidos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#eef1f5;--card:#fff;--ink:#14213d;--mut:#5d6b82;--line:#d8dee8;--blue:#2447b8;--bluet:#e4eaff;--or:#c96a00;--ort:#fff0dc;--rd:#c62828;--rdt:#fde6e6;--gr:#1b7f45;--grt:#e0f4e8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0f1624;--card:#18223a;--ink:#e8edf7;--mut:#9aa8c2;--line:#2c3a5a;--blue:#8fa8ff;--bluet:#22305c;--or:#ffb04d;--ort:#3a2a12;--rd:#ff8a8a;--rdt:#3d1a1f;--gr:#6fdc9c;--grt:#12301f}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:'Bricolage Grotesque',Georgia,serif;margin:0}
+.w{max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+h1{font-size:26px;color:var(--blue)}header p{margin:0;color:var(--mut);font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:8px}
+button,select,input,textarea{font:inherit;color:var(--ink)}
+.b{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:500}
+.b.p{background:var(--blue);color:#fff;border-color:var(--blue)}[data-theme=x]{}
+@media(prefers-color-scheme:dark){.b.p{color:#0f1624}}
+.b:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-align:left;cursor:default}
+.k b{display:block;font:700 24px 'Bricolage Grotesque',serif}.k span{color:var(--mut);font-size:13px}
+button.k{cursor:pointer}button.k.on{outline:2px solid var(--blue)}
+.k.o{background:var(--ort);color:var(--or)}.k.r{background:var(--rdt);color:var(--rd)}.k.g{background:var(--grt);color:var(--gr)}
+.k.o span,.k.r span,.k.g span{color:inherit}
+.fl{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--mut)}
+input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
+.tools{display:grid;grid-template-columns:1fr 200px;gap:8px;margin-bottom:12px}
+@media(max-width:560px){.tools{grid-template-columns:1fr}}
+.gd{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:10px}
+.c{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;width:100%}
+.c.proc{border-left-color:var(--or)}.c.ver{border-left-color:var(--rd)}.c.ok{border-left-color:var(--gr)}
+.c .t{display:flex;justify-content:space-between;gap:8px;font-weight:600}.c small{color:var(--mut)}
+.c .a{margin-top:6px;font-size:13px}
+.tag{display:inline-block;border-radius:20px;padding:1px 9px;font-size:12px;background:var(--bluet);color:var(--blue)}
+.tag.proc{background:var(--ort);color:var(--or)}.tag.ver{background:var(--rdt);color:var(--rd)}.tag.ok{background:var(--grt);color:var(--gr)}
+.ov{position:fixed;inset:0;background:rgba(10,16,30,.55);z-index:20;display:none;justify-content:center;align-items:flex-start;overflow:auto;padding:0}
+.ov.on{display:flex}
+.sh{background:var(--bg);width:100%;max-width:760px;min-height:100%;padding:16px 16px calc(24px + env(safe-area-inset-bottom,0px));padding-top:calc(16px + env(safe-area-inset-top,0px))}
+.sh>.hd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+summary{padding:10px 12px;font:600 16px 'Bricolage Grotesque',serif;cursor:pointer}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;padding:0 12px 12px}
+.al{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:14px}
+.al ul{margin:4px 0 0;padding-left:18px}
+.sem{display:grid;gap:10px}
+.blk{border-radius:12px;padding:12px}.blk h3{font-size:18px}.blk ul{margin:6px 0 0;padding-left:18px}
+.blk.o{background:var(--ort);color:var(--or)}.blk.r{background:var(--rdt);color:var(--rd)}.blk.g{background:var(--grt);color:var(--gr)}
+.blk li{color:var(--ink)}
+.tabs{display:flex;gap:6px;margin-bottom:10px}.tabs .b.on{background:var(--blue);color:#fff}
+pre{white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font:14px/1.5 Figtree,sans-serif}
+.cr{display:flex;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}.cr span{flex:1}
+.em{text-align:center;padding:40px 12px;color:var(--mut)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:20px;z-index:50;display:none}
+@media(prefers-reduced-motion:no-preference){.ov.on .sh{animation:u .18s ease-out}@keyframes u{from{transform:translateY(16px);opacity:.4}}}
+.vt{display:flex;gap:4px}.vt .b{padding:7px 9px;display:flex}.vt .b.on{background:var(--blue);color:#fff}.vt svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
+.tools{grid-template-columns:1fr auto!important}.c .id{font:700 18px 'Bricolage Grotesque',serif}.c .a{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;min-width:96px}td input,td select{padding:5px}td input[readonly]{background:transparent;border-color:transparent}td.ac{min-width:220px}td .a{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sg{margin-top:4px;padding:5px 8px;border:1px dashed var(--or);border-radius:8px;font-size:12px;color:var(--or);background:var(--ort)}.sg button{margin-left:4px;border:1px solid currentColor;background:transparent;color:inherit;border-radius:6px;cursor:pointer}
+button.b.p.dn{background:#b3261e;border-color:#b3261e;color:#fff!important}button.b.p.dn:hover{background:#8f1d17;color:#fff!important}button.b.p.dn:focus-visible{outline:3px solid #fff;box-shadow:0 0 0 5px #b3261e;color:#fff!important}button.b.p.dn:active{background:#6f1713;color:#fff!important}button.b.p.dn:disabled{opacity:.75;cursor:not-allowed;color:#fff!important}.dn{color:var(--rd)}
+.fr{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:12px}.fr .fl{min-width:130px}.fr .vt{margin-left:auto}.fr .b:disabled{opacity:.5;cursor:not-allowed}@media(max-width:560px){.fr .fl{flex:1 1 130px}}
+/* ===== Temas ===== */
+:root[data-theme=orig]{color-scheme:dark;--bg:#0f1624;--card:#18223a;--ink:#e8edf7;--mut:#9aa8c2;--line:#2c3a5a;--blue:#8fa8ff;--bluet:#22305c;--or:#ffb04d;--ort:#3a2a12;--rd:#ff8a8a;--rdt:#3d1a1f;--gr:#6fdc9c;--grt:#12301f}
+:root[data-theme=orig] .b.p{color:#0f1624}
+:root[data-theme=claro]{color-scheme:light;--bg:#F7F0E4;--card:#FFFBF4;--ink:#302A29;--mut:#6B5E56;--line:#E3D3B8;--blue:#A54F38;--bluet:#F6E6DD;--or:#B25900;--ort:#FFE9CC;--rd:#B3261E;--rdt:#FBE3DF;--gr:#1B6B3A;--grt:#DCEFE0}
+:root[data-theme=oscuro]{color-scheme:dark;--bg:#302A29;--card:#3B3432;--ink:#F3EBDD;--mut:#C2B5A6;--line:#564B47;--blue:#DC8F6F;--bluet:#4E352C;--or:#FFAE4D;--ort:#4A3519;--rd:#FF8F85;--rdt:#4D2523;--gr:#74D99D;--grt:#1F3E2C}
+:root[data-theme=oscuro] .b.p,:root[data-theme=oscuro] .tabs .b.on,:root[data-theme=oscuro] .vt .b.on{color:#2a1d19}
+:root:is([data-theme=claro],[data-theme=oscuro]) :is(h1,h2,h3,summary,.k b,.c .id){font-family:Fraunces,Georgia,serif}
+:root:is([data-theme=claro],[data-theme=oscuro]) header{padding-bottom:14px}
+:root:is([data-theme=claro],[data-theme=oscuro]) header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:8px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='8'%3E%3Cpath d='M0 7L4.5 1 9 7 13.5 1 18 7' fill='none' stroke='%23D8B77E' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x}
+:root:is([data-theme=claro],[data-theme=oscuro]) h1::before{content:'';display:inline-block;width:26px;height:26px;margin-right:8px;vertical-align:-5px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='5' y='5' width='14' height='14' fill='%23A54F38'/%3E%3Crect x='5' y='5' width='14' height='14' fill='%23315B68' transform='rotate(45 12 12)' opacity='.9'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%23D8B77E'/%3E%3C/svg%3E") center/contain no-repeat}
+:root:is([data-theme=claro],[data-theme=oscuro]) .ov{background:rgba(35,25,22,.6)}
+header{position:relative;padding-right:46px}
+.rp{position:absolute;top:0;right:0;z-index:40;width:38px;height:38px}
+.rp-menu{position:absolute;top:0;left:0;width:38px;height:38px;pointer-events:none}
+.rp-main,.rp-o{border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
+.rp-main{width:38px;height:38px}.rp-main:hover{border-color:var(--blue)}.rp-main:active{transform:scale(.94)}
+.rp svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rp-o{position:absolute;top:2px;left:2px;width:34px;height:34px;pointer-events:auto;opacity:0;visibility:hidden;transform:translate(0,0) scale(.6);transition:transform .18s ease,opacity .18s ease,visibility .18s}
+.rp.open .rp-o{opacity:1;visibility:visible;transform:translate(var(--x),var(--y)) scale(1)}
+.rp-o:nth-child(1){--x:-60px;--y:5px}.rp-o:nth-child(2){--x:-42px;--y:42px}.rp-o:nth-child(3){--x:-5px;--y:60px}
+.rp-o[data-th=orig]{background:#8fa8ff;color:#0f1624;border-color:#8fa8ff}.rp-o[data-th=claro]{background:#D8B77E;color:#302A29;border-color:#D8B77E}.rp-o[data-th=oscuro]{background:#A54F38;color:#fff;border-color:#A54F38}
+.rp-o:hover{transform:translate(var(--x),var(--y)) scale(1.1)}.rp-o:active{transform:translate(var(--x),var(--y)) scale(.95)}
+.rp-o[aria-checked=true]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
+.rp button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.rp-o::after{content:attr(data-n);position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;background:var(--ink);color:var(--bg);font-size:12px;padding:2px 8px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none}
+.rp-o:hover::after,.rp-o:focus-visible::after{opacity:1}
+@media(prefers-reduced-motion:reduce){.rp-o{transition:none}}
+</style></head><body>
+<div class="w" id="app"></div>
+<div class="ov" id="ov"><div class="sh" id="sh"></div></div>
+<div id="toast"></div>
+<input type="file" id="file" accept=".csv,.xlsx,.xls" hidden>
+<script>
+const SIN='Sin registrar',L=a=>a.split('|'),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SEC=[['info','Información general'],['pago','Pagos'],['dir','Direcciones'],['env','Envíos'],['rec','Recepción'],['rcl','Reclamos'],['reg','Regalos']];
+const D=[['id','ID Pedido','t','info'],['fecha','Fecha','d','info'],['cliente','Cliente','t','info'],['producto','Producto','t','info'],['monto','Monto USD','n','info'],['estadoOrig','Estado original','t','info'],['notas','Notas','a','info'],['estado','Estado operativo','s','info',L('Sin registrar|Nuevo|Confirmado|En preparación|Finalizado|Cancelado')],
+['pFecha','Fecha de pago','d','pago'],['pMedio','Medio de pago','s','pago',L('Sin registrar|PayPal|Mercado Pago')],['pTx','ID de transacción','t','pago'],['pMonto','Monto pagado','n','pago'],['pEstado','Estado de pago','s','pago',L('Sin registrar|Pendiente de pago|Pago reportado|En verificación|Pago parcial|Pagado|Pago rechazado|Reembolsado')],
+['dNom','Nombre del destinatario','t','dir'],['dTel','Teléfono','t','dir'],['dCalle','Calle y número','t','dir'],['dCol','Colonia','t','dir'],['dCiudad','Ciudad','t','dir'],['dEdo','Estado o provincia','t','dir'],['dCp','Código postal','t','dir'],['dPais','País','t','dir'],['dRef','Referencias','a','dir'],
+['eTipo','Tipo de envío','s','env',L('Sin registrar|Paquetería|Servicio postal|Mensajería local|Entrega personal|Recolección en tienda')],['eEmp','Empresa u operador','t','env',0,1],['eProv','Proveedor de envío','t','env'],['eFecha','Fecha de envío','d','env'],['eGuia','Número de guía','t','env'],['eLink','Enlace de rastreo','t','env'],['eEntr','Fecha estimada de entrega','d','env'],['eEstado','Estado de envío','s','env',L('Sin registrar|No preparado|En preparación|Listo para envío|Enviado|En tránsito|Incidencia|Devuelto|No aplica')],
+['rFecha','Fecha de recepción','d','rec'],['rEstado','Estado de recepción','s','rec',L('Sin registrar|Pendiente de entrega|Entregado sin confirmar|Recibido y confirmado|Entrega fallida|Rechazado por destinatario|Devuelto al remitente')],
+['cTipo','Tipo de reclamo','t','rcl'],['cDesc','Descripción','a','rcl'],['cFecha','Fecha de apertura','d','rcl'],['cEstado','Estado del reclamo','s','rcl',L('Sin reclamo|Abierto|En revisión|Esperando respuesta|Resuelto|Cerrado')],['cRes','Fecha de resolución','d','rcl'],
+['gEs','¿Es regalo?','s','reg',L('Sí|No|Sin registrar')],['gMsg','Mensaje personalizado','a','reg']
+].map(([id,label,type,sec,opts,cond])=>({id,label,type,sec,opts,cond,vis:true}));
+const COND=['Paquetería','Servicio postal','Mensajería local'];
+let O=[],P={f:D,secs:Object.fromEntries(SEC.map(s=>[s[0],true]))},flt={q:'',c:'',e:''},cur=-1;
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const sv=()=>{try{localStorage.setItem('ap_o',JSON.stringify(O));localStorage.setItem('ap_p',JSON.stringify(P))}catch(e){}};
+O=ld('ap_o',[]);P=ld('ap_p',P);D.forEach(d=>{if(!P.f.find(f=>f.id===d.id))P.f.push(d)});
+const fd=id=>P.f.find(f=>f.id===id);
+const val=(o,id)=>{const f=fd(id),v=o.v[id];return f&&f.type==='s'?(v||f.opts[0]):(v??'')};
+const $=s=>document.querySelector(s);
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)}
+function cls(o){
+ const g=i=>val(o,i),A=new Set,I=[],est=g('estado'),pe=g('pEstado'),ee=g('eEstado'),re=g('rEstado'),ce=g('cEstado'),et=g('eTipo');
+ const open=['Abierto','En revisión','Esperando respuesta'].includes(ce),m=parseFloat(g('monto')),pm=parseFloat(g('pMonto'));
+ if(est==='Cancelado'&&!open)return{c:'none',A:[],I:[]};
+ if(!g('cliente'))I.push('Falta el cliente');
+ if(!(m>0))I.push('Falta un monto válido');
+ if(pe==='Pagado'&&pm>0&&m>0&&pm<m)I.push('Pagado, pero el monto pagado es menor al total');
+ if(pe==='Pago parcial'&&pm>0&&m>0&&pm>=m)I.push('Pago parcial con monto completo');
+ if(re==='Recibido y confirmado'&&pe!=='Pagado')I.push('Recibido, pero el pago no está confirmado');
+ if(est==='Finalizado'&&['Pendiente de pago','Pago rechazado','Reembolsado'].includes(pe))I.push('Finalizado con pago '+pe.toLowerCase());
+ if(['Enviado','En tránsito'].includes(ee)&&['Paquetería','Servicio postal'].includes(et)&&!g('eGuia'))I.push('Enviado sin número de guía');
+ if(['Recibido y confirmado','Entregado sin confirmar'].includes(re)&&['No preparado','En preparación'].includes(ee))I.push('Entrega registrada sin envío realizado');
+ if(ee==='Listo para envío'&&COND.includes(et)&&!(g('dCalle')&&g('dCiudad')))I.push('Listo para envío sin dirección completa');
+ ({'Pendiente de pago':'Cobrar pago','Pago reportado':'Verificar pago','En verificación':'Verificar pago','Pago parcial':'Cobrar saldo','Pago rechazado':'Contactar por pago rechazado'})[pe]&&A.add(({'Pendiente de pago':'Cobrar pago','Pago reportado':'Verificar pago','En verificación':'Verificar pago','Pago parcial':'Cobrar saldo','Pago rechazado':'Contactar por pago rechazado'})[pe]);
+ if(open)A.add('Atender reclamo ('+ce.toLowerCase()+')');
+ if(ee==='Incidencia')A.add('Resolver incidencia de envío');
+ if(ee==='Devuelto')A.add('Gestionar devolución');
+ if(['Entrega fallida','Rechazado por destinatario','Devuelto al remitente'].includes(re))A.add('Reprogramar entrega');
+ if(re==='Entregado sin confirmar')A.add('Confirmar recepción con el cliente');
+ if(ee==='Listo para envío'&&!I.length)A.add('Despachar pedido');
+ if(['Enviado','En tránsito'].includes(ee))A.add('Dar seguimiento al envío');
+ if(ee==='En preparación'||est==='En preparación')A.add('Preparar pedido'+(g('gEs')==='Sí'?' con envoltura de regalo':''));
+ if(['Nuevo',SIN].includes(est))A.add('Confirmar pedido');
+ if(est==='Confirmado'&&!A.size)A.add('Iniciar preparación');
+ if(!I.length&&pe==='Pagado'&&re==='Recibido y confirmado'&&!open)return{c:'ok',A:[],I};
+ if(!A.size&&!I.length)A.add(est==='Finalizado'?'Confirmar recepción con el cliente':'Revisar pedido');
+ return{c:I.length?'ver':'proc',A:[...A],I};
+}
+const NM={proc:'En proceso',ver:'Por verificar',ok:'Completo',none:'Cancelado'},EM={proc:'🟠',ver:'🔴',ok:'🟢'};
+const money=n=>'$'+(+n||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+function render(){
+ const C=O.map(cls),n=c=>C.filter(x=>x.c===c).length;
+ const tot=O.reduce((s,o)=>s+(parseFloat(val(o,'monto'))||0),0),pg=O.reduce((s,o)=>s+(parseFloat(val(o,'pMonto'))||0),0);
+ const q=flt.q.toLowerCase(),idx=O.map((o,i)=>i).filter(i=>{const o=O[i];return(!flt.c||C[i].c===flt.c)&&(!flt.e||val(o,'estado')===flt.e)&&(!q||['id','cliente','producto','notas'].some(k=>val(o,k).toLowerCase().includes(q)))});
+ $('#app').innerHTML=`<header><div><h1>ArtesaníasPlus</h1><p>Pedidos de Rosa · ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</p></div>
+ <div class="bar"><button class="b p" data-a="imp">Importar Excel/CSV</button><button class="b p" data-a="rep">Generar reporte diario</button><button class="b" data-a="exp">Exportar</button><button class="b" data-a="new">+ Pedido</button><button class="b" data-a="cfg">Campos</button></div></header>
+ <div class="kp"><div class="k"><b>${O.length}</b><span>Pedidos</span></div><div class="k"><b>${money(tot)}</b><span>Ventas USD</span></div><div class="k"><b>${money(pg)}</b><span>Cobrado USD</span></div>
+ ${[['proc','o'],['ver','r'],['ok','g']].map(([c,k])=>`<button class="k ${k} ${flt.c===c?'on':''}" data-a="fc" data-c="${c}"><b>${n(c)}</b><span>${EM[c]} ${NM[c]}</span></button>`).join('')}</div>
+ <div class="tools"><input id="q" type="search" placeholder="Buscar por ID, cliente, producto o nota" value="${esc(flt.q)}"><select id="fe"><option value="">Todos los estados</option>${fd('estado').opts.map(x=>`<option${flt.e===x?' selected':''}>${x}</option>`).join('')}</select></div>
+ ${idx.length?`<div class="gd">${idx.map(i=>{const o=O[i],c=C[i];return`<button class="c ${c.c}" data-a="open" data-i="${i}"><div class="t"><span>${esc(val(o,'cliente')||SIN)}</span><span>${val(o,'monto')?money(val(o,'monto')):SIN}</span></div><small>${esc(val(o,'id'))} · ${esc(val(o,'producto')||SIN)}</small><div class="row" style="margin:6px 0 0"><span class="tag">${val(o,'estado')}</span><span class="tag ${c.c}">${NM[c.c]}</span></div><div class="a">${esc((c.I[0]||c.A[0])||'')}</div></button>`}).join('')}</div>`:
+ `<div class="em">${O.length?'Ningún pedido coincide con los filtros.':'Aún no hay pedidos. Importa tu Excel o CSV para empezar.<div class="row" style="justify-content:center"><button class="b p" data-a="imp">Importar Excel/CSV</button><button class="b" data-a="demo">Cargar pedidos de ejemplo</button></div>'}</div>`}`;
+ const qi=$('#q');qi.oninput=e=>{flt.q=e.target.value;const p=e.target.selectionStart;render();const x=$('#q');x.focus();x.setSelectionRange(p,p)};$('#fe').onchange=e=>{flt.e=e.target.value;render()};
+}
+const ovs=h=>{$('#sh').innerHTML=h;$('#ov').classList.add('on')},close=()=>{$('#ov').classList.remove('on');cur=-1;render()};
+function fld(o,f){const v=val(o,f.id),a=`data-f="${f.id}"`;let i;
+ if(f.type==='s')i=`<select ${a}>${f.opts.map(x=>`<option${x===v?' selected':''}>${esc(x)}</option>`).join('')}</select>`;
+ else if(f.type==='a')i=`<textarea ${a} rows="2" placeholder="${SIN}">${esc(v)}</textarea>`;
+ else i=`<input ${a} type="${f.type==='d'?'date':f.type==='n'?'number':'text'}" ${f.type==='n'?'step="any" ':''}value="${esc(v)}" placeholder="${SIN}">`;
+ return`<label class="fl"><span>${esc(f.label)}</span>${i}</label>`}
+function hdr(o){const c=cls(o);return`<span class="tag ${c.c}">${EM[c.c]||''} ${NM[c.c]}</span>${c.I.length?`<div class="al"><b>Por verificar</b><ul>${c.I.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}${c.A.length?`<div class="al"><b>Acciones</b><ul>${c.A.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}`}
+function detail(i){cur=i;const o=O[i];
+ ovs(`<div class="hd"><h2>${esc(val(o,'id'))} · ${esc(val(o,'cliente')||SIN)}</h2><button class="b" data-a="close">Cerrar</button></div><div id="hd" style="margin-bottom:10px">${hdr(o)}</div>`+
+ SEC.filter(([s])=>P.secs[s]).map(([s,t])=>{const fs=P.f.filter(f=>f.sec===s&&f.vis&&(!f.cond||COND.includes(val(o,'eTipo'))));return`<details${s==='info'?' open':''}><summary>${t}</summary><div class="fg">${fs.length?fs.map(f=>fld(o,f)).join(''):'<span class="fl">Sin campos visibles</span>'}</div></details>`}).join('')+`<div class="row"><button class="b p" data-a="close">Guardar y volver</button></div><p class="fl">Los cambios se guardan automáticamente en este navegador.</p>`)}
+function cfg(){ovs(`<div class="hd"><h2>Personalizar campos</h2><button class="b p" data-a="close">Listo</button></div><p class="fl">Ocultar un campo o sección no borra sus valores. Usa las flechas para reordenar.</p>`+
+ SEC.map(([s,t])=>`<details open><summary><label><input type="checkbox" style="width:auto" data-s="${s}" ${P.secs[s]?'checked':''}> ${t}</label></summary><div style="padding:0 12px 10px">${P.f.filter(f=>f.sec===s).map(f=>`<div class="cr"><input type="checkbox" style="width:auto" data-v="${f.id}" ${f.vis?'checked':''}><span>${esc(f.label)}${f.custom?' (propio)':''}</span><button class="b" data-a="mv" data-id="${f.id}" data-d="-1" aria-label="Subir">↑</button><button class="b" data-a="mv" data-id="${f.id}" data-d="1" aria-label="Bajar">↓</button></div>`).join('')}</div></details>`).join('')+
+ `<details open><summary>Crear campo nuevo</summary><div class="fg"><label class="fl">Nombre<input id="nn"></label><label class="fl">Tipo<select id="nt"><option value="t">Texto</option><option value="a">Texto largo</option><option value="n">Número</option><option value="d">Fecha</option><option value="y">Sí / No</option></select></label><label class="fl">Sección<select id="ns">${SEC.map(([s,t])=>`<option value="${s}">${t}</option>`).join('')}</select></label><button class="b p" data-a="add">Agregar campo</button></div></details>`)}
+const sw=(a,d)=>{const i=P.f.findIndex(f=>f.id===a);let j=i+d;while(P.f[j]&&P.f[j].sec!==P.f[i].sec)j+=d;if(P.f[j]){[P.f[i],P.f[j]]=[P.f[j],P.f[i]]}};
+function rep(tab){const C=O.map(cls),g=c=>O.map((o,i)=>[o,C[i]]).filter(x=>x[1].c===c),B=[['proc','o','🟠 En proceso','Acciones urgentes'],['ver','r','🔴 Por verificar','Inconsistencias por revisar'],['ok','g','🟢 Completos','Pedidos completos']];
+ ovs(`<div class="hd"><h2>Reporte diario</h2><button class="b" data-a="close">Cerrar</button></div><div class="tabs"><button class="b ${tab?'':'on'}" data-a="rep">Prioridades</button><button class="b ${tab?'on':''}" data-a="rep" data-t="1">Resumen para WhatsApp</button></div>`+
+ (tab?`<pre id="wa">${esc(wa())}</pre><div class="row"><button class="b p" data-a="copy">Copiar mensaje</button><button class="b" data-a="wapp">Abrir WhatsApp</button></div>`:
+ `<div class="sem">${B.map(([c,k,t,s])=>{const r=g(c);return`<div class="blk ${k}"><h3>${t}: ${r.length}</h3><small>${s}</small><ul>${r.map(([o,x])=>`<li>${esc(val(o,'id'))} ${esc(val(o,'cliente'))}: ${esc(c==='ver'?x.I.join('; '):c==='ok'?'Todo en orden':x.A.join(', '))}</li>`).join('')||'<li>Nada por aquí</li>'}</ul></div>`}).join('')}</div>`))}
+function wa(){const C=O.map(cls),T=[['proc','🟠 EN PROCESO'],['ver','🔴 POR VERIFICAR'],['ok','🟢 COMPLETOS']];
+ for(let max=12;max>=1;max--){const L=['*ArtesaníasPlus - '+new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long'})+'*'];
+  T.forEach(([c,t])=>{const r=O.map((o,i)=>[o,C[i]]).filter(x=>x[1].c===c);L.push('',t+' ('+r.length+')');
+   if(c==='ok'){if(r.length)L.push('✅ '+r.slice(0,max*2).map(x=>val(x[0],'id')).join(', ')+(r.length>max*2?' y '+(r.length-max*2)+' más':''))}
+   else{r.slice(0,max).forEach(([o,x])=>L.push('• '+val(o,'id')+' '+val(o,'cliente')+': '+(c==='ver'?x.I[0]:x.A.join(', '))));if(r.length>max)L.push('…y '+(r.length-max)+' más')}});
+  const s=L.join('\n');if(s.split(/\s+/).length<=350||max===1)return s}}
+function exp(){const H=P.f.map(f=>f.label).concat(['Clasificación','Acciones']),q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+ const R=O.map(o=>{const c=cls(o);return P.f.map(f=>q(val(o,f.id))).concat([q(NM[c.c]),q(c.A.join('; '))]).join(',')});
+ const b=new Blob(['\ufeff'+[H.map(q).join(',')].concat(R).join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='pedidos-artesanias-plus.csv';a.click();toast('Exportado')}
+const nrm=s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+const MAP={id:'id',idpedido:'id',pedido:'id',fecha:'fecha',cliente:'cliente',producto:'producto',montousd:'monto',monto:'monto',estado:'estadoOrig',estadooriginal:'estadoOrig',notas:'notas'};
+function csv(t){const R=[];let r=[],c='',q=0;for(let i=0;i<t.length;i++){const h=t[i];if(q){if(h==='"'){if(t[i+1]==='"'){c+='"';i++}else q=0}else c+=h}else if(h==='"')q=1;else if(h===','||h===';'){r.push(c);c=''}else if(h==='\n'||h==='\r'){if(h==='\r'&&t[i+1]==='\n')i++;r.push(c);c='';R.push(r);r=[]}else c+=h}if(c||r.length){r.push(c);R.push(r)}return R.filter(x=>x.some(y=>y.trim()))}
+function dt(s){s=String(s).trim();let m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);return m?`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`:s}
+function imp(rows){if(rows.length<2)return toast('El archivo no tiene filas');const H=rows[0].map(String);let add=0,upd=0;
+ const cm=H.map(h=>{const k=MAP[nrm(h)];if(k)return k;const id='x_'+nrm(h);if(h.trim()&&!fd(id))P.f.push({id,label:h.trim(),type:'t',sec:'info',vis:true,custom:true});return h.trim()?id:null});
+ rows.slice(1).forEach((r,n)=>{const raw={};H.forEach((h,i)=>raw[h]=r[i]??'');const v={};cm.forEach((k,i)=>{if(k&&r[i]!=null&&String(r[i]).trim()!=='')v[k]=k==='fecha'?dt(r[i]):String(r[i]).trim()});
+  if(!v.id)v.id='P'+String(O.length+n+1).padStart(4,'0');const e=O.find(o=>o.v.id===v.id);
+  if(e){for(const k in v)if(!e.v[k])e.v[k]=v[k];e.raw=raw;analyze(e);upd++}else{const nw={v,raw};analyze(nw);O.push(nw);add++}});
+ sv();render();toast(add+' nuevos, '+upd+' actualizados')}
+const dmOld=()=>{const t=new Date().toISOString().slice(0,10),mk=(id,cl,pr,mo,es,x)=>({v:Object.assign({id,fecha:t,cliente:cl,producto:pr,monto:mo,estadoOrig:es},x),raw:{}});
+ O.push(mk('A-101','María López','Rebozo bordado','85','Pagado',{estado:'Confirmado',pEstado:'Pagado',pMonto:'85',eEstado:'En preparación'}),
+ mk('A-102','John Smith','Alebrije mediano','60','Pendiente',{estado:'Nuevo',pEstado:'Pendiente de pago'}),
+ mk('A-103','Ana Ruiz','Jarrón de talavera','120','Enviado',{estado:'Finalizado',pEstado:'Pagado',pMonto:'120',eTipo:'Paquetería',eEstado:'Enviado'}),
+ mk('A-104','Luis Pérez','Set de platos','95','Entregado',{estado:'Finalizado',pEstado:'Pagado',pMonto:'95',eEstado:'Enviado',rEstado:'Recibido y confirmado'}),
+ mk('A-105','Carla Gómez','Canasta tejida','40','Reclamo',{estado:'Finalizado',pEstado:'Pagado',pMonto:'40',rEstado:'Recibido y confirmado',cEstado:'Abierto',cTipo:'Producto dañado'}),
+ mk('A-106','Sofía Díaz','Collar de plata','70','Listo',{estado:'Confirmado',pEstado:'Pago reportado',eEstado:'Listo para envío',eTipo:'Mensajería local',gEs:'Sí'}));sv();render()};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,d=b.dataset;
+ if(a==='imp')$('#file').click();else if(a==='rep')rep(d.t);else if(a==='exp')exp();else if(a==='cfg')cfg();else if(a==='demo')dm();
+ else if(a==='new'){const n=O.length+1;O.push({v:{id:'P'+String(n).padStart(4,'0'),fecha:new Date().toISOString().slice(0,10)},raw:{}});sv();detail(O.length-1)}
+ else if(a==='open')detail(+d.i);else if(a==='close')close();
+ else if(a==='fc'){flt.c=flt.c===d.c?'':d.c;render()}
+ else if(a==='mv'){sw(d.id,+d.d);sv();cfg()}
+ else if(a==='add'){const n=$('#nn').value.trim();if(!n)return toast('Escribe un nombre');let t=$('#nt').value,f={id:'c_'+Date.now(),label:n,type:t,sec:$('#ns').value,vis:true,custom:true};if(t==='y'){f.type='s';f.opts=[SIN,'Sí','No']}P.f.push(f);sv();cfg();toast('Campo agregado')}
+ else if(a==='copy'){const t=wa();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Mensaje copiado'),()=>{const r=document.createRange();r.selectNodeContents($('#wa'));getSelection().removeAllRanges();getSelection().addRange(r);toast('Selecciona y copia el texto')})}
+ else if(a==='wapp'){const T=wa(),mob=/Android|iPhone|iPad/i.test(navigator.userAgent),u=(mob?'whatsapp://send?text=':'https://web.whatsapp.com/send?text=')+encodeURIComponent(T),l=document.createElement('a');try{navigator.clipboard.writeText(T)}catch(e){}l.href=u;l.target='_blank';l.rel='noopener noreferrer';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>toast('Si WhatsApp no se abrió, usa Copiar mensaje'),1800)}});
+document.addEventListener('change',e=>{const t=e.target;
+ if(t.dataset.f&&cur>=0){const o=O[cur];o.v[t.dataset.f]=t.value;sv();if(t.tagName==='SELECT'){const y=$('#ov').scrollTop;detail(cur);$('#ov').scrollTop=y}else $('#hd').innerHTML=hdr(o)}
+ else if(t.dataset.v){fd(t.dataset.v).vis=t.checked;sv()}else if(t.dataset.s){P.secs[t.dataset.s]=t.checked;sv()}
+ else if(t.id==='file'&&t.files[0]){const f=t.files[0],rd=new FileReader();
+  if(/\.csv$/i.test(f.name)){rd.onload=()=>imp(csv(rd.result));rd.readAsText(f)}
+  else if(window.XLSX){rd.onload=()=>{const w=XLSX.read(rd.result,{type:'array'}),s=w.Sheets[w.SheetNames[0]];imp(XLSX.utils.sheet_to_json(s,{header:1,raw:true,defval:''}))};rd.readAsArrayBuffer(f)}
+  else toast('Para Excel se necesita conexión; guarda como CSV e inténtalo otra vez');t.value=''}});
+/* ===== Actualización: clasificación, notas, tabla, reportes ===== */
+const NMC={proc:'EN PROCESO',ver:'POR VERIFICAR',ok:'COMPLETOS'};
+P.f.forEach(f=>{const d=D.find(x=>x.id===f.id);if(d&&!f.custom){f.opts=d.opts;f.label=d.label}});P.view=P.view||'c';
+function sug(t){t=t||'';const s={};let x;
+ if(/paypal/i.test(t)&&!/mercado\s*pago/i.test(t))s.pMedio='PayPal';else if(/mercado\s*pago/i.test(t)&&!/paypal/i.test(t))s.pMedio='Mercado Pago';
+ if(/\bregalo\b/i.test(t)&&!/\bno\s+(es\s+)?(para\s+)?regalo/i.test(t))s.gEs='Sí';
+ if(/pago\s+(confirmado|verificado|acreditado)/i.test(t))s.pEstado='Pagado';
+ else if(/(no ha pagado|pago pendiente|pendiente de pago)/i.test(t))s.pEstado='Pendiente de pago';
+ else if(/(asegura|dice|afirma|indica|report[oó]).{0,25}pag|ya pag[oó]|comprobante/i.test(t))s.pEstado='Pago reportado';
+ if(x=t.match(/gu[ií]a[:\s#]*([A-Z0-9-]{6,})/i))s.eGuia=x[1];
+ if(x=t.match(/\b(DHL|FedEx|Estafeta|UPS|Redpack|Correos)\b/i)){s.eTipo=/correos/i.test(x[1])?'Servicio postal':'Paquetería';s.eEmp=x[1]}
+ if(x=t.match(/env[ií]ad[oa]\s+(?:el\s+)?(\d{1,2}[\/-]\d{1,2}[\/-]\d{4})/i)){s.eFecha=dt(x[1]);s.eEstado='Enviado'}else if(/\bse envi[oó]\b/i.test(t))s.eEstado='Enviado';
+ if(/confirm[oó]\s+(la\s+)?(recepci[oó]n|que\s+(lo\s+)?recibi[oó])|recibido conforme/i.test(t))s.rEstado='Recibido y confirmado';
+ if(x=t.match(/entregad[oa]\s+(?:el\s+)?(\d{1,2}[\/-]\d{1,2}[\/-]\d{4})/i))s.rFecha=dt(x[1]);
+ if(x=t.match(/[^.]*(rot[oa]s?|dañad[oa]s?|quebrad[oa]s?|defectuos[oa]s?)[^.]*/i)){s.cEstado='Abierto';s.cTipo='Producto dañado';s.cDesc=x[0].trim()}
+ else if(/solicit\w*\s+(un\s+)?cambio|reembolso|devoluci[oó]n/i.test(t)){s.cEstado='Abierto';s.cTipo=/reembolso|devoluci/i.test(t)?'Reembolso o devolución':'Solicitud de cambio'}
+ if(x=t.match(/direcci[oó]n:?\s*([^.;\n]{8,80})/i))s.dCalle=x[1].trim();
+ return s}
+function analyze(o){o.s=o.s||{};o.d=o.d||[];const s=sug(o.v.notas);for(const k in s){const f=fd(k);if(!f||o.d.includes(k))continue;const c=o.v[k];if(c&&!(f.opts&&c===f.opts[0]))continue;o.s[k]=s[k]}}
+function cls(o,auto){const g=i=>val(o,i),S=o.s||{},e=i=>{const v=g(i),f=fd(i);return((f.type==='s'?v===f.opts[0]:!v)&&S[i])?S[i]:v};
+ const id=g('id'),pr=g('producto'),cl=g('cliente')||'el cliente',oe=g('estadoOrig'),ol=oe.toLowerCase(),est=g('estado'),pe=g('pEstado'),pE=e('pEstado'),ee=e('eEstado'),re=e('rEstado'),ce=e('cEstado'),et=e('eTipo'),m=parseFloat(g('monto')),pm=parseFloat(g('pMonto')),A=[],I=[];
+ const open=['Abierto','En revisión','Esperando respuesta'].includes(ce);let r;
+ if(est==='Cancelado'&&!open){r=['Pagado','Pago parcial'].includes(pe)?{c:'proc',A:['Gestionar el reembolso de '+cl],I}:{c:'ver',A,I:['Pedido cancelado. Confirmar si ya no requiere acciones.']}}
+ else{
+ if(!g('cliente'))I.push('Falta el nombre del cliente. Completar el dato antes de actuar.');
+ if(!(m>0))I.push('Falta un monto válido. Revisar el pedido y capturarlo.');
+ if(['Pago reportado','En verificación'].includes(pE)&&pe!=='Pagado')I.push((/pendiente/.test(ol)?'El estado original indica "'+oe+'", pero el cliente reporta haber pagado. ':'El pago está reportado, pero no confirmado. ')+'Revisar el comprobante y confirmar el pago.');
+ if(/entregad/.test(ol)&&re!=='Recibido y confirmado')I.push('El estado original dice "'+oe+'", pero no hay confirmación del cliente. Confirmar la recepción.');
+ if(pe==='Pagado'&&pm>0&&m>0&&pm<m)I.push('Está marcado como pagado, pero el monto pagado es menor al total. Revisar el monto.');
+ if(re==='Recibido y confirmado'&&pe!=='Pagado'&&!I.length)I.push('Hay recepción confirmada, pero el pago no está confirmado. Revisar el pago.');
+ if(est==='Finalizado'&&['Pendiente de pago','Pago rechazado','Reembolsado'].includes(pe))I.push('Está finalizado, pero el pago figura como '+pe.toLowerCase()+'. Revisar el pago.');
+ if(['Enviado','En tránsito'].includes(ee)&&['Paquetería','Servicio postal'].includes(et)&&!e('eGuia'))I.push('Figura como enviado, pero falta el número de guía. Capturar la guía.');
+ if(['Recibido y confirmado','Entregado sin confirmar'].includes(re)&&['No preparado','En preparación'].includes(ee))I.push('Hay entrega registrada, pero el envío no aparece realizado. Revisar el envío.');
+ if(ee==='Listo para envío'&&COND.includes(et)&&!(g('dCalle')&&g('dCiudad')))I.push('Está listo para envío, pero falta la dirección. Completar la dirección.');
+ if(I.length)r={c:'ver',A,I};
+ else if(re==='Recibido y confirmado'&&pe==='Pagado'&&!open)r={c:'ok',A,I};
+ else{
+ if(pe==='Pendiente de pago')A.push('Cobrar el pago de '+cl);
+ if(pe==='Pago rechazado')A.push('Contactar a '+cl+' por el pago rechazado');
+ if(pe==='Pago parcial')A.push('Cobrar el saldo de '+cl);
+ if(open)A.push('Contactar a '+cl+': '+(e('cTipo')||'reclamo')+' ('+ce.toLowerCase()+')');
+ if(ee==='Incidencia')A.push('Resolver la incidencia del envío de '+cl);
+ if(ee==='Devuelto')A.push('Gestionar la devolución de '+cl);
+ if(['Entrega fallida','Rechazado por destinatario','Devuelto al remitente'].includes(re))A.push('Reprogramar la entrega a '+cl);
+ if(re==='Entregado sin confirmar')A.push('Pedir a '+cl+' confirmar la recepción');
+ if(ee==='Listo para envío')A.push('Enviar '+(pr||'el pedido')+(g('dCiudad')?' a '+g('dCiudad'):''));
+ if(['Enviado','En tránsito'].includes(ee))A.push('Dar seguimiento al envío'+(e('eGuia')?' (guía '+e('eGuia')+')':''));
+ if(ee==='En preparación'||est==='En preparación')A.push('Preparar '+(pr||'el pedido')+(e('gEs')==='Sí'?' como regalo':''));
+ if(est==='Nuevo')A.push('Confirmar el pedido con '+cl);
+ if(est==='Confirmado'&&!A.length)A.push('Iniciar la preparación de '+(pr||'el pedido'));
+ r=A.length?{c:'proc',A,I}:{c:'ver',A,I:['No hay información suficiente para definir la acción. Revisar el estado del pedido y completar los datos.']}}}
+ if(!auto&&o.ovr&&o.ovr!==r.c)r={c:o.ovr,A:o.ovr==='ok'?[]:r.A,I:o.ovr==='ok'?[]:r.I,man:1};
+ return r}
+const txt=c=>c.c==='proc'?(c.A.join('; ')||'Revisar pedido'):c.c==='ver'?(c.I[0]||'Revisar datos del pedido'):'Resuelto';
+const sv2=()=>sv();
+function render0(){const C=O.map(cls),n=c=>C.filter(x=>x.c===c).length,q=flt.q.toLowerCase(),V=P.view;
+ const tot=O.reduce((s,o)=>s+(parseFloat(val(o,'monto'))||0),0),pg=O.reduce((s,o)=>s+(parseFloat(val(o,'pMonto'))||0),0);
+ const idx=O.map((o,i)=>i).filter(i=>{const o=O[i];return(!flt.c||C[i].c===flt.c)&&dok(o)&&(!q||['id','cliente','producto','notas'].some(k=>val(o,k).toLowerCase().includes(q)))});
+ const ro=id=>!flt.u&&['id','fecha','cliente','producto','monto','estadoOrig'].includes(id);
+ const ci=(i,id,t)=>`<input data-t="${id}" data-i="${i}" type="${t}" ${t==='number'?'step="any" ':''}value="${esc(val(O[i],id))}" placeholder="${SIN}" ${ro(id)?'readonly':''}>`;
+ const ic=(v,t,p)=>`<button class="b ${V===v?'on':''}" data-a="view" data-v="${v}" title="${t}" aria-label="${t}" aria-pressed="${V===v}"><svg viewBox="0 0 24 24">${p}</svg></button>`;
+ $('#app').innerHTML=`<header><div><h1>ArtesaníasPlus</h1><p>Pedidos de Rosa · ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</p></div>
+ <div class="bar"><button class="b p" data-a="imp">Importar Excel/CSV</button><button class="b p" data-a="rep">Generar reporte diario</button><button class="b" data-a="exp">Exportar</button><button class="b" data-a="new">+ Pedido</button><button class="b" data-a="cfg">Campos</button><button class="b dn" data-a="clr">Limpiar todo</button></div></header>
+ <div class="kp"><div class="k"><b>${O.length}</b><span>Pedidos</span></div><div class="k"><b>${money(tot)}</b><span>Ventas USD</span></div><div class="k"><b>${money(pg)}</b><span>Cobrado USD</span></div>
+ ${[['proc','o'],['ver','r'],['ok','g']].map(([c,k])=>`<button class="k ${k} ${flt.c===c?'on':''}" data-a="fc" data-c="${c}"><b>${n(c)}</b><span>${EM[c]} ${NMC[c]}</span></button>`).join('')}</div>
+ <div class="tools"><input id="q" type="search" placeholder="Buscar por ID, cliente, producto o nota" value="${esc(flt.q)}"><div class="vt">${ic('c','Vista de tarjetas','<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>')}${ic('t','Vista de tabla','<rect x="3" y="4" width="18" height="16"/><path d="M3 10h18M3 15h18M10 4v16"/>')}</div></div>
+ ${!idx.length?`<div class="em">${O.length?'Ningún pedido coincide con los filtros.':'Aún no hay pedidos. Importa tu Excel o CSV para empezar.<div class="row" style="justify-content:center"><button class="b p" data-a="imp">Importar Excel/CSV</button><button class="b" data-a="demo">Cargar pedidos de ejemplo</button></div>'}</div>`:
+ V==='c'?`<div class="gd">${idx.map(i=>{const o=O[i],c=C[i];return`<button class="c ${c.c}" data-a="open" data-i="${i}"><div class="t"><span class="id">${esc(val(o,'id'))}</span><span class="tag ${c.c}">${EM[c.c]} ${NMC[c.c]}${c.man?' ✎':''}</span></div><small>${esc(val(o,'fecha')||SIN)}</small><div>${esc(val(o,'cliente')||SIN)} · ${esc(val(o,'producto')||SIN)}</div><div class="t"><span>${val(o,'monto')?money(val(o,'monto')):SIN}</span><span class="tag">Original: ${esc(val(o,'estadoOrig')||SIN)}</span></div><div class="a">${esc(txt(c))}</div></button>`}).join('')}</div>`:
+ `<label class="fl" style="flex-direction:row;align-items:center;gap:6px;margin-bottom:6px"><input type="checkbox" style="width:auto" id="un" ${flt.u?'checked':''}> Permitir editar datos originales importados</label><div class="tw"><table><thead><tr><th>ID</th><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Monto USD</th><th>Estado original</th><th>Estado general</th><th>Método de pago</th><th>Acción o revisión</th><th></th></tr></thead><tbody>${idx.map(i=>{const o=O[i],c=C[i],ns=Object.keys(o.s||{}).filter(k=>!(o.v[k]&&!(fd(k).opts&&o.v[k]===fd(k).opts[0]))).length;return`<tr><td>${ci(i,'id','text')}</td><td>${ci(i,'fecha','date')}</td><td>${ci(i,'cliente','text')}</td><td>${ci(i,'producto','text')}</td><td>${ci(i,'monto','number')}</td><td>${ci(i,'estadoOrig','text')}</td><td><select data-ov="${i}">${['proc','ver','ok'].map(k=>`<option value="${k}"${c.c===k?' selected':''}>${NMC[k]}</option>`).join('')}</select></td><td><select data-t="pMedio" data-i="${i}">${fd('pMedio').opts.map(x=>`<option${val(o,'pMedio')===x?' selected':''}>${x}</option>`).join('')}</select></td><td class="ac"><div class="a"><b>${esc(val(o,'id'))}:</b> ${esc(txt(c))}</div></td><td><button class="b" data-a="open" data-i="${i}">Detalle${ns?' 💡'+ns:''}</button></td></tr>`}).join('')}</tbody></table></div>`}`;
+ const qi=$('#q');qi.oninput=e=>{flt.q=e.target.value;const p=e.target.selectionStart;render();const x=$('#q');x.focus();x.setSelectionRange(p,p)};const u=$('#un');if(u)u.onchange=e=>{flt.u=e.target.checked;render()}}
+function fld(o,f){const v=val(o,f.id),a=`data-f="${f.id}"`,sg=(o.s||{})[f.id],un=f.type==='s'?v===f.opts[0]:!v;let i;
+ if(f.type==='s')i=`<select ${a}>${f.opts.map(x=>`<option${x===v?' selected':''}>${esc(x)}</option>`).join('')}</select>`;
+ else if(f.type==='a')i=`<textarea ${a} rows="2" placeholder="${SIN}">${esc(v)}</textarea>`;
+ else i=`<input ${a} type="${f.type==='d'?'date':f.type==='n'?'number':'text'}" ${f.type==='n'?'step="any" ':''}value="${esc(v)}" placeholder="${SIN}">`;
+ return`<div><label class="fl"><span>${esc(f.label)}</span>${i}</label>${sg&&un?`<div class="sg">💡 Sugerido desde Notas: <b>${esc(sg)}</b> <button data-a="acc" data-id="${f.id}">Usar</button><button data-a="dis" data-id="${f.id}">Descartar</button></div>`:''}</div>`}
+function hdr(o){const c=cls(o),a=cls(o,1),ix=O.indexOf(o);return`<span class="tag ${c.c}">${EM[c.c]} ${NMC[c.c]}</span>${c.man?` <small>Corregido por Rosa (automático: ${NMC[a.c]})</small>`:''}<div class="al">${c.c==='ok'?'<b>¿Qué ya está resuelto?</b> Entregado, confirmado y sin acciones pendientes.':c.c==='ver'?'<b>¿Qué tengo que revisar yo?</b><ul>'+c.I.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>':'<b>¿Qué tengo que hacer hoy?</b><ul>'+c.A.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>'}<label class="fl" style="margin-top:8px">Corregir clasificación<select data-ov="${ix}">${['proc','ver','ok'].map(k=>`<option value="${k}"${c.c===k?' selected':''}>${NMC[k]}${a.c===k?' (automática)':''}</option>`).join('')}</select></label></div>`}
+const RB=[['proc','o','¿Qué tengo que hacer hoy? — EN PROCESO'],['ver','r','¿Qué tengo que revisar yo? — POR VERIFICAR'],['ok','g','¿Qué ya está resuelto? — COMPLETOS']];
+function rep0(tab){const C=O.map(cls),R=c=>O.map((o,i)=>[o,C[i]]).filter(x=>x[1].c===c);
+ ovs(`<div class="hd"><h2>Reporte diario</h2><button class="b" data-a="close">Cerrar</button></div><div class="tabs"><button class="b ${tab?'':'on'}" data-a="rep">Prioridades</button><button class="b ${tab?'on':''}" data-a="rep" data-t="1">Resumen para WhatsApp</button></div>`+(tab?`<pre id="wa">${esc(wa())}</pre><div class="row"><button class="b p" data-a="copy">Copiar mensaje</button><button class="b" data-a="wapp">Abrir WhatsApp</button></div>`:`<div class="sem">${RB.map(([c,k,h])=>{const r=R(c);return`<div class="blk ${k}"><h3>${h} (${r.length})</h3><ul>${!r.length?'<li>Ninguno</li>':c==='ok'?`<li>${r.map(x=>esc(val(x[0],'id'))).join(', ')}</li>`:r.map(([o,x])=>`<li>${esc(val(o,'id'))}: ${esc(c==='proc'?x.A.join('; '):x.I[0])}</li>`).join('')}</ul></div>`}).join('')}</div>`))}
+function wa(){const C=O.map(cls),R=c=>O.map((o,i)=>[o,C[i]]).filter(x=>x[1].c===c);
+ for(let mx=30;mx>=1;mx--){const out=[];RB.forEach(([c,k,h])=>{const r=R(c);out.push(CIR[c]+' '+h);if(!r.length)out.push('Ninguno');else if(c==='ok')out.push(r.map(x=>val(x[0],'id')).join(', '));else{r.slice(0,mx).forEach(([o,x])=>out.push(val(o,'id')+': '+(c==='proc'?x.A.join('; '):x.I[0])));if(r.length>mx)out.push('…y '+(r.length-mx)+' más')}out.push('')});const s=out.join('\n').trim();if(s.split(/\s+/).length<=350||mx===1)return s}}
+function clr(){ovs(`<div class="hd"><h2>¿Eliminar todos los pedidos?</h2></div><div class="al"><p>Esta acción eliminará permanentemente la información del dashboard y no podrás recuperarla.</p><p>Si deseas conservar tus registros, te recomendamos exportarlos antes de continuar.</p><p><b>¿Estás segura de que deseas eliminar toda la información?</b></p><label class="fl"><span>Escribe ELIMINAR para confirmar</span><input id="cf" autocomplete="off"></label></div><div class="row"><button class="b" data-a="close">Cancelar</button><button class="b" data-a="exp">Exportar datos</button><button class="b p dn" id="del" data-a="clrgo" disabled>Eliminar todos los datos</button></div>`)}
+function dm(){const t=new Date().toISOString().slice(0,10),mk=(id,cl,pr,mo,es,notas,x)=>{const o={v:Object.assign({id,fecha:t,cliente:cl,producto:pr,monto:mo,estadoOrig:es,notas},x),raw:{}};analyze(o);return o};
+ O.push(mk('P001','María López','Tapete tejido','85','Por enviar','Pago confirmado por PayPal. Regalo para su mamá.',{pEstado:'Pagado',pMonto:'85',eEstado:'Listo para envío',eTipo:'Entrega personal',estado:'Confirmado'}),
+ mk('P002','John Smith','Alebrije mediano','60','Pendiente','El cliente asegura que ya pagó con Mercado Pago, mandó comprobante.',{}),
+ mk('P003','Ana Ruiz','Jarrón de talavera','120','Entregado','Llegó rota la tapa y pide cambio.',{pEstado:'Pagado',pMonto:'120'}),
+ mk('P004','Luis Pérez','Set de platos','95','Entregado','El cliente confirmó la recepción. Pagó por PayPal.',{pEstado:'Pagado',pMonto:'95'}));sv();render()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,d=b.dataset,o=O[cur];
+ if(a==='view'){P.view=d.v;sv();render()}else if(a==='clr')clr();
+ else if(a==='clrgo'){if($('#cf').value.trim().toUpperCase()==='ELIMINAR'){O=[];sv();close();toast('Todos los pedidos fueron eliminados')}}
+ else if(a==='acc'&&o){o.v[d.id]=o.s[d.id];delete o.s[d.id];sv();detail(cur)}
+ else if(a==='dis'&&o){delete o.s[d.id];(o.d=o.d||[]).push(d.id);sv();detail(cur)}});
+document.addEventListener('input',e=>{if(e.target.id==='cf')$('#del').disabled=e.target.value.trim().toUpperCase()!=='ELIMINAR'});
+document.addEventListener('change',e=>{const t=e.target;
+ if(t.dataset.t!==undefined){const o=O[+t.dataset.i];o.v[t.dataset.t]=t.value;if(t.dataset.t==='notas')analyze(o);sv();render()}
+ else if(t.dataset.ov!==undefined){const o=O[+t.dataset.ov];if(t.value==='auto')delete o.ovr;else o.ovr=t.value;sv();cur>=0?detail(cur):render()}
+ else if(t.dataset.f==='notas'&&cur>=0){analyze(O[cur]);sv();detail(cur)}});
+O.forEach(o=>{if(!o.s)analyze(o)});sv();
+/* ===== v3: análisis semántico de notas y clasificación con trazabilidad ===== */
+const nz=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+function an(t){const F={},ev=[],s={},yr=x=>x&&/\d{1,2}[\/-]\d{1,2}[\/-]\d{4}/.test(x)?dt(x):'';
+ const add=(k,x,q,l)=>{if(!F[k]){F[k]={x,t:q};ev.push('Notas: “'+q+'” → '+l)}return F[k]};
+ for(const q of String(t||'').split(/[.;\n!]+/).map(x=>x.trim()).filter(Boolean)){const n=nz(q),h=r=>r.test(n);let m;
+  const nr=h(/\b(no|nunca|aun no|todavia no)\s+(ha\s+|le\s+|lo\s+|la\s+|me\s+|se\s+|han\s+)*(recib\w*|lleg\w*|entreg\w*)|no haber recibido|sin recibir|no ha llegado|entrega fallida|rechaz\w*/);
+  const dg=h(/\b(rot[oa]s?|danad\w*|quebrad\w*|defectuos\w*|mal estado|llego mal|incomplet\w*|faltan\w*|equivocad\w*|despostill\w*|manchad\w*)\b/);
+  const rc=!nr&&h(/\b(recib(i|io|ido|ida|ieron)|lleg(o|aron)|ya (lo |la )?tiene|entregad[oa]|entrega|recepcion)\b/);
+  const cf=h(/\bconfirm(o|aron|a|ada|ado)\b|\bconfirmacion\b|\b(dice|dijo|avis\w*|indic\w*|report\w*|manifest\w*|escribi\w*|conforme|todo bien|satisfech\w*|le gusto|le encanto|agradec\w*)\b/)&&!h(/\b(falta|pendiente|esperar|esperando|sin|por|pedir|solicitar|hay que)\b[^,]{0,20}confirm/);
+  const dd=(q.match(/\b\d{1,2}[\/-]\d{1,2}(?:[\/-]\d{2,4})?\b|\b\d{1,2} de [a-záéíóú]+/i)||[''])[0];
+  if(nr)add('notRec',1,q,'el cliente no recibió el pedido');
+  if(rc&&!dg){if(cf){add('rec',dd,q,'recepción confirmada por el cliente');s.rEstado='Recibido y confirmado';if(yr(dd))s.rFecha=dt(dd)}else if(h(/entregad|entrega/)){add('delUn',dd,q,'entrega mencionada sin confirmación del cliente');s.rEstado='Entregado sin confirmar'}}
+  const chg=h(/\b(cambio|cambiar|reposicion|reponer|reemplaz\w*)\b/),ref=h(/reembols\w*|devolucion|devolver/),res=h(/\b(resuelt\w*|solucionad\w*|ya se (cambio|repuso|reembols\w*|resolvio)|cambio (enviado|realizado|entregado)|reembolso (realizado|hecho|enviado))\b/);
+  if(!res&&(dg||ref||(chg&&h(/pide|pidio|solicit\w*|quiere|requiere|prefiere/)))){const c=add('claim',1,q,'reclamo o solicitud de cambio');c.dg=c.dg||dg;c.chg=c.chg||chg;c.ref=c.ref||ref;s.cEstado='Abierto';s.cTipo=c.dg?'Producto dañado':c.ref?'Reembolso o devolución':'Solicitud de cambio';s.cDesc=s.cDesc||q}
+  else if(res&&(dg||chg||ref))add('claimRes',1,q,'reclamo resuelto');
+  const pc=h(/\b(pago|transferencia|deposito|abono)\s+(ya\s+)?(confirmad\w*|verificad\w*|acreditad\w*|recibid\w*)|\bya (se )?(acredito|verifico)|\bpagado\b/)&&!h(/\bno\b[^,]{0,12}pagad|sin pagar/);
+  const pr=!pc&&h(/\b(dice|dijo|asegura|afirma|indica|reporta|menciona|comenta|mando|envio|manda)\b[^,]{0,30}\b(pag\w*|transfer\w*|deposit\w*|comprobante|captura)|\bya (pago|transfirio|deposito)\b|\brevisar (la |el )?(transferencia|pago|deposito)|\bcomprobante\b/);
+  const pp=!pc&&h(/\b(no ha pagado|sin pagar|falta (el )?pago|pago pendiente|pendiente (de|el) pago|saldo pendiente|esperando (el )?pago|cobrar|debe)\b/);
+  if(pc){add('payConf',1,q,'pago confirmado');s.pEstado='Pagado'}else if(pr){add('payRep',1,q,'el cliente reporta haber pagado (sin confirmar)');s.pEstado='Pago reportado'}else if(pp){add('payPend',1,q,'pago pendiente');s.pEstado='Pendiente de pago'}
+  if(h(/paypal/)&&!h(/mercado ?pago/))s.pMedio='PayPal';else if(h(/mercado ?pago/)&&!h(/paypal/))s.pMedio='Mercado Pago';
+  const gt=h(/\b(falta|pendiente|por|hay que)\b[^,]{0,20}\b(guia|rastreo)|\b(mandar|enviar|pasar|dar|compartir)(le)?\s+(el\s+)?(numero de\s+)?(guia|rastreo)/);
+  const st=!gt&&h(/\b(enviar(lo|la)?|mandar(lo|la)?|por enviar|falta (enviar|mandar)\w*|pendiente de envio|despachar)\b/);
+  const sh=!st&&!gt&&h(/\b(ya se envio|se envio|fue enviad[oa]|enviad[oa]|despachad[oa]|salio|en transito|ya va en camino)\b/);
+  if(gt)add('guideTodo',1,q,'falta enviar el número de guía');
+  if(st){const c=(q.match(/\b(?:enviar|mandar)(?:lo|la)?\s+(?:a|hacia|para)\s+([A-ZÁÉÍÓÚÑ][\wáéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][\wáéíóúñ]+)?)/)||[])[1];add('shipTodo',c||'',q,'envío pendiente'+(c?' a '+c:''));if(c)s.dCiudad=c}
+  if(sh){add('shipped',dd,q,'pedido enviado');s.eEstado='Enviado';if(yr(dd))s.eFecha=dt(dd)}
+  if(h(/en preparacion|preparando|empacando|por empacar|en elaboracion/)){add('prep',1,q,'pedido en preparación');if(!s.eEstado)s.eEstado='En preparación'}
+  if(h(/\bregalo\b/)&&!h(/\bno\b[^,]{0,10}regalo/)){add('gift',1,q,'es regalo');s.gEs='Sí'}
+  if(m=q.match(/gu[ií]a[:\s#]*([A-Z0-9-]*\d[A-Z0-9-]{5,})/i)){add('guide',m[1],q,'número de guía '+m[1]);s.eGuia=m[1]}
+  if(m=q.match(/\b(DHL|FedEx|Estafeta|UPS|Redpack|Correos)\b/i)){s.eTipo=/correos/i.test(m[1])?'Servicio postal':'Paquetería';s.eEmp=m[1]}
+  if(m=q.match(/direcci[oó]n:?\s*([^.;\n]{8,80})/i))s.dCalle=m[1].trim()}
+ return{F,ev,s}}
+function sug(t){return an(t).s}
+function analyze(o){o.s={};o.d=o.d||[];const s=sug(o.v.notas);for(const k in s){const f=fd(k);if(!f||o.d.includes(k))continue;const c=o.v[k];if(c&&!(f.opts&&c===f.opts[0]))continue;o.s[k]=s[k]}}
+function cls(o,auto){const g=i=>val(o,i),{F,ev:E}=an(g('notas')),cl=g('cliente')||'el cliente',pr=g('producto')||'el pedido',oe=g('estadoOrig'),ol=nz(oe),est=g('estado'),A=[],I=[],ev=[...E];
+ const f=i=>{const v=g(i),d=fd(i);return d&&d.type==='s'?v!==d.opts[0]:!!v};
+ if(oe)ev.push('Estado original: “'+oe+'”');['pEstado','eEstado','rEstado','cEstado','estado'].forEach(k=>f(k)&&ev.push('Campo estructurado: '+fd(k).label+' = '+g(k)));
+ const pe=g('pEstado'),re=g('rEstado'),ee=g('eEstado'),ce=g('cEstado');
+ const rec=re==='Recibido y confirmado'||!!F.rec,nR=!!F.notRec||['Entrega fallida','Rechazado por destinatario','Devuelto al remitente'].includes(re);
+ const cO=['Abierto','En revisión','Esperando respuesta'].includes(ce)||(!!F.claim&&!['Resuelto','Cerrado'].includes(ce)),C=F.claim||{};
+ const pc=pe==='Pagado'||(!!F.payConf&&!f('pEstado')),prp=['Pago reportado','En verificación'].includes(pe)||(!!F.payRep&&!f('pEstado')),ppd=pe==='Pendiente de pago'||(!!F.payPend&&!f('pEstado'));
+ const guide=g('eGuia')||(F.guide&&F.guide.x),city=g('dCiudad')||(F.shipTodo&&F.shipTodo.x)||'',gift=g('gEs')==='Sí'||(!!F.gift&&g('gEs')===SIN);
+ const shT=!!F.shipTodo||ee==='Listo para envío',shd=!!F.shipped||['Enviado','En tránsito'].includes(ee),prep=!!F.prep||ee==='En preparación'||est==='En preparación',entO=/entregad/.test(ol);let r;
+ if(est==='Cancelado'&&!cO)r=['Pagado','Pago parcial'].includes(pe)||pc?{c:'proc',A:['Gestionar el reembolso de '+pr+' a '+cl],I}:{c:'ver',A,I:['El pedido está cancelado. Confirmar si ya no requiere acciones.']};
+ else{
+  if(!g('cliente'))I.push('Falta el nombre del cliente. Completarlo antes de actuar.');
+  if(entO&&nR)I.push(`El estado indica “${oe}”, pero ${F.notRec?'las notas dicen que el cliente no lo recibió':'la recepción figura como fallida o rechazada'}. Revisar con el cliente y la paquetería antes de actualizar.`);
+  else if(entO&&prep&&!rec)I.push(`El estado indica “${oe}”, pero las notas dicen que sigue en preparación. Revisar si el pedido realmente salió.`);
+  if(rec&&nR)I.push('Las notas confirman la recepción y también dicen que no llegó. Revisar cuál información es la más reciente.');
+  if(/pendiente|por pagar|sin pago/.test(ol)&&(F.payRep||F.payConf)&&pe!=='Pagado')I.push(`El estado indica “${oe}”, pero el cliente afirma haber pagado. Revisar la transferencia antes de actualizar el estado.`);
+  else if(prp&&!pc)I.push('El cliente afirma haber pagado, pero el pago no está confirmado. Revisar el comprobante o la transferencia.');
+  if((pe==='Pendiente de pago'&&F.payConf)||(F.payConf&&F.payPend))I.push('Hay notas de pago confirmado y de pago pendiente. Revisar cuál es la correcta.');
+  if(/enviado|en transito/.test(ol)&&prep&&!shd&&!rec)I.push(`El estado indica “${oe}”, pero las notas dicen que sigue en preparación. Revisar si ya salió.`);
+  if(shT&&!shd&&!city&&!g('dCalle')&&!['Entrega personal','Recolección en tienda'].includes(g('eTipo')))I.push(`Hay que enviar ${pr}, pero falta el destino. Pedir la dirección a ${cl}.`);
+  if(I.length)r={c:'ver',A,I};
+  else{
+   if(cO){const x=ce==='Abierto'||!ce?'':'';A.push(C.dg&&C.chg?`Gestionar el cambio de ${pr}: llegó dañado y ${cl} pidió cambio`:C.dg?`Contactar a ${cl} por el producto dañado y acordar cambio o reembolso`:C.ref?`Gestionar el reembolso de ${pr} a ${cl}`:C.chg?`Gestionar el cambio de ${pr} solicitado por ${cl}`:`Atender el reclamo de ${cl} (${g('cTipo')||ce.toLowerCase()})`)}
+   if(pe==='Pago rechazado')A.push(`Contactar a ${cl} por el pago rechazado`);else if(pe==='Pago parcial')A.push(`Cobrar el saldo de ${cl}`);else if(ppd&&!pc)A.push(`Cobrar a ${cl} el pago pendiente de ${pr}`);
+   if(F.guideTodo&&!guide)A.push(`Enviar a ${cl} el número de guía de ${pr}`);
+   if(shT&&!shd)A.push(`Enviar ${pr}${gift?' como regalo':''}${city?' a '+city:''}`);
+   else if(prep&&!shd)A.push(`Terminar de preparar ${pr}${gift?' como regalo':''}`);
+   if(nR&&!entO)A.push(`Rastrear ${pr} con la paquetería y avisar a ${cl}, que reporta no haberlo recibido`);
+   if(!rec&&!nR&&(shd||F.delUn||entO))A.push(shd&&!F.delUn&&!entO?`Dar seguimiento al envío de ${pr}${guide?' (guía '+guide+')':''}`:`Pedir a ${cl} que confirme la recepción de ${pr}`);
+   if(!A.length&&!rec){if(est==='Nuevo')A.push(`Confirmar el pedido con ${cl}`);else if(est==='Confirmado')A.push(`Iniciar la preparación de ${pr}`)}
+   if(A.length)r={c:'proc',A,I};
+   else if(rec)r={c:'ok',A,I};
+   else r={c:'ver',A,I:[g('notas')?`Las notas no indican una acción clara (“${g('notas').slice(0,70)}…”). Revisar el pedido y definir el siguiente paso.`:oe?`El estado “${oe}” no indica una acción clara y no hay notas. Revisar el pedido y registrar su situación actual.`:'No hay estado ni notas para decidir qué hacer. Registrar la situación actual del pedido.']}}}
+ r.ev=ev;r.auto=r.c;
+ if(!auto&&o.ovr){r={...r,c:o.ovr,man:1,auto:r.c};if(o.ovr==='ok'){r.A=[];r.I=[]}}
+ return r}
+function hdr(o){const c=cls(o),ix=O.indexOf(o);return`<span class="tag ${c.c}">${EM[c.c]} ${NMC[c.c]}</span>${c.man?` <small>Clasificación manual (automática: ${NMC[c.auto]})</small>`:''}<div class="al">${c.c==='ok'?'<b>¿Qué ya está resuelto?</b> Entrega confirmada y sin pendientes.':c.c==='ver'?'<b>¿Qué tengo que revisar yo?</b><ul>'+(c.I.length?c.I:['Clasificado manualmente como POR VERIFICAR.']).map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>':'<b>¿Qué tengo que hacer hoy?</b><ul>'+(c.A.length?c.A:['Clasificado manualmente como EN PROCESO.']).map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>'}<details style="margin:8px 0"><summary style="font-size:14px">Evidencias usadas</summary><ul style="font-size:13px">${c.ev.map(x=>`<li>${esc(x)}</li>`).join('')||'<li>Sin evidencias registradas</li>'}</ul></details><label class="fl">Clasificación<select data-ov="${ix}"><option value="auto"${c.man?'':' selected'}>Automática (${NMC[c.auto]})</option>${['proc','ver','ok'].map(k=>`<option value="${k}"${c.man&&c.c===k?' selected':''}>Manual: ${NMC[k]}</option>`).join('')}</select></label></div>`}
+function exp(){const H=P.f.map(f=>f.label).concat(['Clasificación','Acción o revisión','Evidencias']),q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+ const R=O.map(o=>{const c=cls(o);return P.f.map(f=>q(val(o,f.id))).concat([q(NMC[c.c]+(c.man?' (manual)':'')),q(txt(c)),q(c.ev.join(' | '))]).join(',')});
+ const b=new Blob(['\ufeff'+[H.map(q).join(',')].concat(R).join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='pedidos-artesanias-plus.csv';a.click();toast('Exportado')}
+O.forEach(analyze);sv();
+/* ===== v4: filtros, fechas y WhatsApp ===== */
+function nd(s){s=String(s??'').trim();if(!s)return'';let m;
+ if(/^\d{5}(\.\d+)?$/.test(s)&&+s>20000&&+s<80000)return new Date(Date.UTC(1899,11,30)+Math.floor(+s)*864e5).toISOString().slice(0,10);
+ if(m=s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/))return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
+ if(m=s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})/)){let y=m[3];if(y.length===2)y='20'+y;return y+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0')}
+ return''}
+function dt(s){return nd(s)||String(s).trim()}
+const fa=()=>!!(flt.q||flt.c||flt.d1||flt.d2);
+function dok(o){if(!flt.d1&&!flt.d2)return true;if(!flt.one&&flt.d1&&flt.d2&&flt.d1>flt.d2)return true;const d=nd(val(o,'fecha'));if(!d)return false;if(flt.one)return flt.d1?d===flt.d1:true;return(!flt.d1||d>=flt.d1)&&(!flt.d2||d<=flt.d2)}
+function render(){render0();rpInject();const t=$('.tools');if(!t)return;const bad=!flt.one&&flt.d1&&flt.d2&&flt.d1>flt.d2;
+ t.insertAdjacentHTML('afterend',`<div class="fr"><label class="fl">Fecha<select id="fm"><option value="r"${flt.one?'':' selected'}>Rango</option><option value="1"${flt.one?' selected':''}>Un día</option></select></label><label class="fl">${flt.one?'Día':'Desde'}<input type="date" id="d1" value="${flt.d1||''}"></label>${flt.one?'':`<label class="fl">Hasta<input type="date" id="d2" value="${flt.d2||''}"></label>`}<label class="fl">Clasificación<select id="fc"><option value="">Todos los estados</option>${[['proc','🟠 EN PROCESO'],['ver','🔴 POR VERIFICAR'],['ok','🟢 COMPLETOS']].map(([k,l])=>`<option value="${k}"${flt.c===k?' selected':''}>${l}</option>`).join('')}</select></label><button class="b" data-a="cf" ${fa()?'':'disabled'}>Limpiar filtros</button></div>${bad?'<div class="sg" role="alert" style="margin-bottom:10px">La fecha inicial no puede ser posterior a la final. El filtro de fechas no se aplica hasta corregirla.</div>':''}`);
+ const fr=$('.fr'),vt=$('.vt');if(vt)fr.appendChild(vt);
+ {let ct=0,tot=0;O.forEach(o=>{const c=cls(o),p=parseFloat(val(o,'pMonto')),m=parseFloat(val(o,'monto'))||0;if(c.c==='ok')ct++;tot+=p>0?p:(c.c==='ok'||val(o,'pEstado')==='Pagado'?m:0)});const k=[...document.querySelectorAll('.k')].find(x=>x.textContent.includes('Cobrado USD'));if(k){k.querySelector('b').textContent=money(tot);k.querySelector('span').textContent='Cobrado USD · '+ct+' completos'}}
+ const em=$('.em');if(em&&O.length)em.innerHTML='Ningún pedido coincide con los filtros seleccionados'+(flt.d1||flt.d2?' en ese periodo':'')+'.<div class="row" style="justify-content:center"><button class="b p" data-a="cf">Limpiar filtros</button></div>'}
+function rep(tab){rep0(tab);const b=document.querySelector('[data-a=wapp]');if(b)b.textContent='Enviar por WhatsApp';const p=$('#wa');if(p)p.insertAdjacentHTML('afterend','<p class="fl">Se abrirá WhatsApp con el mensaje ya escrito; tú eliges el contacto y lo envías. Si no se abre, usa Copiar mensaje.</p>')}
+document.addEventListener('change',e=>{const t=e.target,i=t.id;if(i==='d1'){flt.d1=t.value;render()}else if(i==='d2'){flt.d2=t.value;render()}else if(i==='fc'){flt.c=t.value;render()}else if(i==='fm'){flt.one=t.value==='1';if(flt.one)flt.d2='';render()}});
+document.addEventListener('click',e=>{if(e.target.closest('[data-a=cf]')){flt.q='';flt.c='';flt.d1='';flt.d2='';flt.one=false;render()}});
+const CIR={proc:String.fromCodePoint(0x1F7E0),ver:String.fromCodePoint(0x1F534),ok:String.fromCodePoint(0x1F7E2)};
+const TH=[['orig','Original','<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'],['claro','Artesanal Claro','<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'],['oscuro','Artesanal Oscuro','<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>']];
+const rpHTML=()=>{const c=document.documentElement.dataset.theme;return`<div class='rp' id='rp'><button class='rp-main' id='rpm' aria-haspopup='true' aria-expanded='false' aria-controls='rpmenu' aria-label='Cambiar apariencia' title='Apariencia'><svg viewBox='0 0 24 24'><path d='M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H17a4 4 0 0 0 4-4c0-4.4-4-8.2-9-8.2z'/><circle cx='7.5' cy='11' r='1'/><circle cx='10' cy='7' r='1'/><circle cx='14.5' cy='7' r='1'/></svg></button><div class='rp-menu' id='rpmenu' role='radiogroup' aria-label='Apariencia'>${TH.map(([k,n,p])=>`<button class='rp-o' role='radio' data-th='${k}' data-n='${n}' aria-label='${n}' aria-checked='${c===k}'><svg viewBox='0 0 24 24'>${p}</svg></button>`).join('')}</div></div>`};
+function rpInject(){const h=document.querySelector('header');if(h)h.insertAdjacentHTML('beforeend',rpHTML())}
+function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem('ap_theme',t)}catch(e){}document.querySelectorAll('.rp-o').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.th===t)))}
+const rpClose=f=>{const r=$('#rp');if(r&&r.classList.contains('open')){r.classList.remove('open');$('#rpm').setAttribute('aria-expanded','false');if(f)$('#rpm').focus()}};
+document.addEventListener('click',e=>{const m=e.target.closest('#rpm'),o=e.target.closest('.rp-o');if(m){const r=$('#rp'),op=r.classList.toggle('open');m.setAttribute('aria-expanded',String(op))}else if(o){setTheme(o.dataset.th);rpClose(1)}else rpClose()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')rpClose(1)});
+render();
+</script></body></html>
